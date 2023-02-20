@@ -4,8 +4,14 @@ service: "serverless-offline-local-authorizers-examples-simple"
 configValidationMode: warn
 
 plugins:
-  - serverless-offline-local-authorizers-plugin
+  - serverless-offline-local-auth-plugin
   - serverless-offline
+custom:
+  serverless-offline-local-auth:
+    # useful when you run your Authorizer on separate Serverless file e.g. (Monorepo)
+    lambdaEndpoint: http://127.0.0.1:10000
+    # determine your target Lambda function name to proxy to. 
+    lambdaAuthFnName: 'test'
 
 provider:
   name: aws
@@ -16,7 +22,6 @@ provider:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
 
 functions:
-
   publicFunction:
     memorySize: 128
     timeout: 3
@@ -38,7 +43,7 @@ functions:
             type: CUSTOM
             authorizerId: "XXX"
           localAuthorizer:
-            name: "testAuthFnAllow"
+            name: "autoLocalAuthProxy"
             type: "request"
       - http:
           path: /deny
@@ -47,5 +52,5 @@ functions:
             type: CUSTOM
             authorizerId: "XXX"
           localAuthorizer:
-            name: "testAuthFnDeny"
+            name: "autoLocalAuthProxy"
             type: "request"

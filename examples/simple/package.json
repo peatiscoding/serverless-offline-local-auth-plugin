@@ -8,9 +8,12 @@
     "serverless": "^3.2.0",
     "serverless-offline": "^8.4.0"
   },
-  "author": "Nicolai Lang <hi@nlang.de>",
+  "scripts": {
+    "dev:offline": "sls offline start"
+  },
+  "author": "peat<freeuxer@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "serverless-offline-local-authorizers-plugin": "^1.2.0"
+    "serverless-offline-local-auth-plugin": "../../"
   }
 }

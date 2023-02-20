@@ -1,11 +1,13 @@
-# serverless-offline-local-authorizers-plugin
+# serverless-offline-auth-plugin
+
+Forked from: [serverless-offline-auth-plugin](https://github.com/nlang/serverless-offline-local-authorizers-plugin).
 
 [Serverless](http://www.serverless.com) plugin for adding authorizers when developing and testing
 functions locally with [serverless-offline](https://github.com/dherault/serverless-offline).
 
 [![Serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
-[![npm](https://img.shields.io/npm/v/serverless-offline-local-authorizers-plugin.svg)](https://www.npmjs.com/package/serverless-offline-local-authorizers-plugin)
-[![npm](https://img.shields.io/npm/l/serverless-offline-local-authorizers-plugin.svg)](https://www.npmjs.com/package/serverless-offline-local-authorizers-plugin)
+[![npm](https://img.shields.io/npm/v/serverless-offline-local-auth-plugin.svg)](https://www.npmjs.com/package/serverless-offline-local-auth-plugin)
+[![npm](https://img.shields.io/npm/l/serverless-offline-local-auth-plugin.svg)](https://www.npmjs.com/package/serverless-offline-local-auth-plugin)
 
 This plugin allows you to add local authorizer functions to your serverless projects. These authorizers
 are added dynamically in a way they can be called by `serverless-offline` but don't interfer with your
@@ -19,7 +21,7 @@ and developing and testing locally with `serverless-offline`.
 Installing using npm:
 
 ```
-npm i serverless-offline-local-authorizers-plugin --save-dev
+npm i serverless-offline-local-auth-plugin --save-dev
 ```
 
 ## Usage
@@ -30,7 +32,7 @@ project root (that's where your `serverless.yml` lives).
 If you want the local function to call your deployed shared authorizer it could look something
 like this:
 
-```javascript
+```js
 const AWS = require("aws-sdk");
 const mylocalAuthProxyFn = async (event, context) => {
 
@@ -79,14 +81,14 @@ functions:
 
 ```yaml
 plugins:
-  - serverless-offline-local-authorizers-plugin
+  - serverless-offline-local-auth-plugin
   - serverless-offline
 ```
 
 *Step 4:* Fire up serverless offline with the `local-authorizers` option:
 
 ```yaml
-$ sls offline local-authorizers --stage dev --region eu-central-1
+$ sls offline local-auth --stage dev --region eu-central-1
 ```
 
 ## License

@@ -48,6 +48,7 @@ export declare class Serverless {
         provider: {
             name: string;
         };
+        custom: any;
         functions: {
             [key: string]: IServerlessFunction;
         };
