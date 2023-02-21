@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs'
 const GENERATE_JS_FILE_V3 = (lambdaEndpoint: string, lambdaFnName: string) => {
     const clauses = [
         '// AUTO GENERATED FILE PLEASE DO NOT MODIFY //',
-        `const { LambdaClient, InvokeCommand } = require('@aws-sdk/lambda');`,
+        `const { LambdaClient, InvokeCommand } = require('@aws-sdk/client-lambda');`,
         `const autoLocalAuthProxy = async (event, _context) => {
             const client = new LambdaClient({ endpoint: '${lambdaEndpoint}' });
             const cmd = new InvokeCommand({
@@ -13,7 +13,10 @@ const GENERATE_JS_FILE_V3 = (lambdaEndpoint: string, lambdaFnName: string) => {
                 Payload: JSON.stringify(event),
             });
             const res = await client.send(cmd)
-            if (res.StatusCode === 200) return JSON.parse(result.Payload)
+            if (res.StatusCode === 200) {
+                const buffer = new Buffer(res.Payload, 'binary').toString('utf-8')
+                return JSON.parse(buffer)
+            }
             throw Error('Authorizer failed to validate request')
         };`,
         `module.exports = { autoLocalAuthProxy };`,
@@ -33,7 +36,9 @@ const GENERATE_JS_FILE_V2 = (lambdaEndpoint: string, lambdaFnName: string) => {
                 InvocationType: 'RequestResponse',
                 Payload: JSON.stringify(event),
             }).promise();
-            if (res.StatusCode === 200) return JSON.parse(result.Payload)
+
+console.log('RESP', res)
+            if (res.StatusCode === 200) return JSON.parse(res.Payload)
             throw Error('Authorizer failed to validate request')
         };`,
         `module.exports = { autoLocalAuthProxy };`,
@@ -92,7 +97,7 @@ export class AwsLocalAuthorizerPlugin {
 
     private onInitialized() {
         const custom = this.serverless.service.custom;
-        const mayBeConfig = (custom['serverless-offline'] || custom)['serverless-offline-local-auth'] || '';
+        const mayBeConfig = (custom['serverless-offline'] || {})['serverless-offline-local-auth'] || custom['serverless-offline-local-auth'] || ''
         this.serverless.cli.log(`serverless-offline-local-auth [INITIALIZING] ${JSON.stringify(mayBeConfig)}.`, "serverless-offline-local-auth-plugin", { color: 'yellow' })
         this.config = this.parseConfiguration(mayBeConfig)
     }
@@ -196,10 +201,10 @@ export class AwsLocalAuthorizerPlugin {
                 authorizerSrcFilename = this.config.lambdaFilePath
             } else if (this.config.mode === 'inject') {
                 // Generate the file!
-                baseDir = '.serverless-offline-local-auth'
-                authorizerSrcFilename = `${this.serverless.config.servicePath}/${baseDir}/local-authorizers.js`
+                baseDir = '.serverless-offline-local-auth/'
+                authorizerSrcFilename = `${this.serverless.config.servicePath}/${baseDir}local-authorizers.js`
                 // make sure our sub-dir exists.
-                const basePath = `${this.serverless.config.servicePath}/${baseDir}/`;
+                const basePath = `${this.serverless.config.servicePath}/${baseDir}`;
                 if (!existsSync(basePath)) {
                     mkdirSync(basePath, { recursive: true })
                 }
