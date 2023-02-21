@@ -93,6 +93,7 @@ export class AwsLocalAuthorizerPlugin {
     private onInitialized() {
         const custom = this.serverless.service.custom;
         const mayBeConfig = (custom['serverless-offline'] || custom)['serverless-offline-local-auth'] || '';
+        this.serverless.cli.log(`serverless-offline-local-auth [INITIALIZING] ${JSON.stringify(mayBeConfig)}.`, "serverless-offline-local-auth-plugin", { color: 'yellow' })
         this.config = this.parseConfiguration(mayBeConfig)
     }
 
@@ -116,22 +117,22 @@ export class AwsLocalAuthorizerPlugin {
             return {
                 mode: 'inject',
                 lambdaAuthFnName: mayBeConfig,
-                lambdaVersion: 'v2',
+                lambdaVersion: 'v3',
             }
         }
         return {
             mode: 'inject',
-            lambdaVersion: 'v2',
+            lambdaVersion: 'v3',
             ...mayBeConfig,
         }
     }
 
     private onOfflineStartInit() {
         if (this.config.mode === 'disabled') {
-            this.serverless.cli.log('serverless-offline-local-auth [DISABLED]', "serverless-offline-local-auth-plugin", { color: 'orange' })
+            this.serverless.cli.log('serverless-offline-local-auth [DISABLED]', "serverless-offline-local-auth-plugin", { color: 'yellow' })
             return
         }
-        this.serverless.cli.log(`serverless-offline-local-auth [ENABLED] ${JSON.stringify(this.config)}`, "serverless-offline-local-auth-plugin", { color: 'blue' })
+        this.serverless.cli.log(`serverless-offline-local-auth [ENABLED] >> ${JSON.stringify(this.config)}`, "serverless-offline-local-auth-plugin", { color: 'blue' })
         return this.applyLocalAuthorizers();
     }
 

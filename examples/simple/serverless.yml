@@ -12,6 +12,8 @@ custom:
     lambdaEndpoint: http://127.0.0.1:10000
     # determine your target Lambda function name to proxy to. 
     lambdaAuthFnName: 'test'
+    # determine the version of AWS-SDK to use in the proxy auth object
+    lambdaVersion: 'v2'
 
 provider:
   name: aws
