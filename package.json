@@ -12,7 +12,8 @@
     "url": "git+https://github.com/peatiscoding/serverless-offline-local-auth-plugin.git"
   },
   "scripts": {
-    "prepare": "tsc"
+    "prepare": "tsc",
+    "build": "tsc"
   },
   "keywords": [
     "serverless",
