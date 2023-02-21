@@ -14,7 +14,7 @@ const GENERATE_JS_FILE_V3 = (lambdaEndpoint: string, lambdaFnName: string) => {
             });
             const res = await client.send(cmd)
             if (res.StatusCode === 200) {
-                const buffer = new Buffer(res.Payload, 'binary').toString('utf-8')
+                const buffer = Buffer.from(res.Payload, 'binary').toString('utf-8')
                 return JSON.parse(buffer)
             }
             throw Error('Authorizer failed to validate request')
