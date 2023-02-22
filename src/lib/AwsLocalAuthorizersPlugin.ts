@@ -30,7 +30,7 @@ const GENERATE_JS_FILE_V2 = (lambdaEndpoint: string, lambdaFnName: string) => {
         '// AUTO GENERATED FILE PLEASE DO NOT MODIFY //',
         `const AWS = require('aws-sdk');`,
         `const autoLocalAuthProxy = async (event, _context) => {
-            const lambda = new AWS.Lambda({ endpoint: '${lambdaEndpoint}', credentials: { accessKeyId: '', secretAccessKey: '' }});
+            const lambda = new AWS.Lambda({ endpoint: '${lambdaEndpoint}' });
             const res = await lambda.invoke({
                 FunctionName: '${lambdaFnName}',
                 InvocationType: 'RequestResponse',
