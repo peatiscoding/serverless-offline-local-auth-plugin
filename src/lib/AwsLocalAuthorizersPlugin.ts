@@ -1,4 +1,4 @@
-import {IServerlessOptions, Serverless} from "./Serverless";
+import {IServerlessOptions, Serverless} from "./Serverless"
 import { existsSync, mkdirSync, writeFileSync } from 'fs'
 
 const GENERATE_JS_FILE_V3 = (lambdaEndpoint: string, lambdaFnName: string) => {
@@ -6,7 +6,7 @@ const GENERATE_JS_FILE_V3 = (lambdaEndpoint: string, lambdaFnName: string) => {
         '// AUTO GENERATED FILE PLEASE DO NOT MODIFY //',
         `const { LambdaClient, InvokeCommand } = require('@aws-sdk/client-lambda');`,
         `const autoLocalAuthProxy = async (event, _context) => {
-            const client = new LambdaClient({ endpoint: '${lambdaEndpoint}', accessKey: '', secretKey: '' });
+            const client = new LambdaClient({ endpoint: '${lambdaEndpoint}', credentials: { accessKeyId: '', secretAccessKey: '' }});
             const cmd = new InvokeCommand({
                 FunctionName: '${lambdaFnName}',
                 InvocationType: 'RequestResponse',
@@ -30,7 +30,7 @@ const GENERATE_JS_FILE_V2 = (lambdaEndpoint: string, lambdaFnName: string) => {
         '// AUTO GENERATED FILE PLEASE DO NOT MODIFY //',
         `const AWS = require('aws-sdk');`,
         `const autoLocalAuthProxy = async (event, _context) => {
-            const lambda = AWS.Lambda({ endpoint: '${lambdaEndpoint}', accessKey: '', secretKey: '' });
+            const lambda = AWS.Lambda({ endpoint: '${lambdaEndpoint}', credentials: { accessKeyId: '', secretAccessKey: '' }});
             const res = await lambda.invoke({
                 FunctionName: '${lambdaFnName}',
                 InvocationType: 'RequestResponse',
